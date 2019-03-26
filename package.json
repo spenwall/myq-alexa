@@ -1,0 +1,15 @@
+{
+  "name": "my-garage",
+  "version": "1.0.0",
+  "description": "Simple open close skill for myq garage door",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Spencer Wallace",
+  "license": "ISC",
+  "dependencies": {
+    "ask-sdk": "^2.5.1",
+    "myq-api": "0.0.2"
+  }
+}
