@@ -29,16 +29,25 @@ const OpenIntentHandler = {
   async handle(handlerInput) {
     await account.login();
 
-    var doorId = await account.getDevices([3, 15, 17])
+    let doorId = await account.getDevices([3, 15, 17])
       .then((result) => {
         return result.devices[1].id;
       });
+    
+    let status = await account.getDoorState(doorId)
+      .then((result) => {
+        return result.doorState;
+      });
 
-    var speechText = await account.setDoorState(doorId, 1)
-      .then(() => {
-        return 'The door is opening';
-      })
-      .catch(() => 'The door is not opening');
+    let speechText = 'The door is already open';
+
+    if (status !== 1) {
+      speechText = await account.setDoorState(doorId, 1)
+        .then(() => {
+          return 'The door is opening';
+        })
+        .catch(() => 'The door is not opening');
+    }
 
     return handlerInput.responseBuilder
       .speak(speechText)
@@ -57,16 +66,25 @@ const CloseIntentHandler = {
   async handle(handlerInput) {
     await account.login();
 
-    var doorId = await account.getDevices([3, 15, 17])
+    let doorId = await account.getDevices([3, 15, 17])
       .then((result) => {
         return result.devices[1].id;
       });
 
-    var speechText = await account.setDoorState(doorId, 0)
-      .then(() => {
-        return 'Closing garage door';
-      })
-      .catch(() => 'Something went wrong please try again');
+    let status = await account.getDoorState(doorId)
+      .then((result) => {
+        return result.doorState;
+      });
+
+    let speechText = 'The door is already closed';
+
+    if (status !== 2) {
+      speechText = await account.setDoorState(doorId, 0)
+        .then(() => {
+          return 'Closing garage door';
+        })
+        .catch(() => 'Something went wrong please try again');
+    }
 
     return handlerInput.responseBuilder
       .speak(speechText)
@@ -85,14 +103,14 @@ const StatusIntentHandler = {
   async handle(handlerInput) {
     await account.login();
 
-    var doorId = await account.getDevices([3, 15, 17])
+    let doorId = await account.getDevices([3, 15, 17])
       .then((result) => {
         return result.devices[1].id;
       });
 
-    var speechText = await account.getDoorState(doorId)
+    let speechText = await account.getDoorState(doorId)
       .then((result) => {
-        return 'The door is ' + util.doorStatus(result.doorState);
+        return 'The door is ' + utils.doorStatus(result.doorState);
       })
       .catch(() => 'Something went wrong please try again');
 
