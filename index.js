@@ -2,7 +2,7 @@ const Alexa = require("ask-sdk-core");
 const MyQ = require("myq-api");
 const utils = require("util");
 
-const account = new MyQ("dude.wallace@gmail.com", "uG5QKmOP9zuR")
+const account = new MyQ("username", "password")
 
 const LaunchRequestHandler = {
   canHandle(handlerInput) {
