@@ -1,6 +1,6 @@
 {
   "name": "my-garage",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Simple open close skill for myq garage door",
   "main": "index.js",
   "scripts": {
