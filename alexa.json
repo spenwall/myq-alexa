@@ -1,0 +1,55 @@
+{
+  "interactionModel": {
+      "languageModel": {
+          "invocationName": "my garage",
+          "intents": [
+              {
+                  "name": "AMAZON.CancelIntent",
+                  "samples": []
+              },
+              {
+                  "name": "AMAZON.HelpIntent",
+                  "samples": []
+              },
+              {
+                  "name": "AMAZON.StopIntent",
+                  "samples": []
+              },
+              {
+                  "name": "AMAZON.NavigateHomeIntent",
+                  "samples": []
+              },
+              {
+                  "name": "OpenIntent",
+                  "slots": [],
+                  "samples": [
+                      "Open door",
+                      "Open garage",
+                      "Open"
+                  ]
+              },
+              {
+                  "name": "CloseIntent",
+                  "slots": [],
+                  "samples": [
+                      "close garage",
+                      "close door",
+                      "Close"
+                  ]
+              },
+              {
+                  "name": "StatusIntent",
+                  "slots": [],
+                  "samples": [
+                      "the status",
+                      "for the status",
+                      "what is the status",
+                      "what's the status",
+                      "status"
+                  ]
+              }
+          ],
+          "types": []
+      }
+  }
+}
