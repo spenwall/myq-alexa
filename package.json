@@ -10,6 +10,6 @@
   "license": "ISC",
   "dependencies": {
     "ask-sdk": "^2.5.1",
-    "myq-api": "0.0.2"
+    "@spenwall/myq-api": "^0.0.3"
   }
 }
