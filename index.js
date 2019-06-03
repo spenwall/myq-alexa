@@ -1,6 +1,5 @@
 const Alexa = require("ask-sdk-core");
 const MyQ = require("myq-api");
-const utils = require("util");
 
 const account = new MyQ("username", "password")
 
@@ -107,10 +106,19 @@ const StatusIntentHandler = {
       .then((result) => {
         return result.devices[1].id;
       });
+    
+      const status = {
+        1: 'open',
+        2: 'closed',
+        3: 'stopped in the middle',
+        4: 'going up',
+        5: 'going down',
+        9: 'not closed'
+      }
 
     let speechText = await account.getDoorState(doorId)
       .then((result) => {
-        return 'The door is ' + utils.doorStatus(result.doorState);
+        return 'The door is ' + status[result.doorState];
       })
       .catch(() => 'Something went wrong please try again');
 
