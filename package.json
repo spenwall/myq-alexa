@@ -9,7 +9,7 @@
   "author": "Spencer Wallace",
   "license": "ISC",
   "dependencies": {
-    "ask-sdk": "^2.5.1",
-    "@spenwall/myq-api": "^0.0.3"
+    "@spenwall/myq-api": "0.0.5",
+    "ask-sdk": "^2.5.1"
   }
 }

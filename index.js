@@ -1,5 +1,5 @@
 const Alexa = require("ask-sdk-core");
-const MyQ = require("myq-api");
+const MyQ = require("@spenwall/myq-api");
 
 const account = new MyQ("username", "password")
 
