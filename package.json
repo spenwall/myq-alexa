@@ -1,15 +1,17 @@
 {
   "name": "my-garage",
-  "version": "0.0.1",
-  "description": "Simple open close skill for myq garage door",
+  "version": "1.0.0",
+  "description": "MyQ garage door opener for alexa",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Spencer Wallace",
-  "license": "ISC",
+  "author": "Amazon Alexa",
+  "license": "Apache License",
   "dependencies": {
-    "@spenwall/myq-api": "0.0.5",
-    "ask-sdk": "^2.5.1"
+    "ask-sdk-core": "^2.7.0",
+    "ask-sdk-model": "^1.19.0",
+    "aws-sdk": "^2.326.0",
+    "myq-api": "^2.0.2"
   }
 }

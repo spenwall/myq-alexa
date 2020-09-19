@@ -1,55 +1,63 @@
 {
-  "interactionModel": {
-      "languageModel": {
-          "invocationName": "my garage",
-          "intents": [
-              {
-                  "name": "AMAZON.CancelIntent",
-                  "samples": []
-              },
-              {
-                  "name": "AMAZON.HelpIntent",
-                  "samples": []
-              },
-              {
-                  "name": "AMAZON.StopIntent",
-                  "samples": []
-              },
-              {
-                  "name": "AMAZON.NavigateHomeIntent",
-                  "samples": []
-              },
-              {
-                  "name": "OpenIntent",
-                  "slots": [],
-                  "samples": [
-                      "Open door",
-                      "Open garage",
-                      "Open"
-                  ]
-              },
-              {
-                  "name": "CloseIntent",
-                  "slots": [],
-                  "samples": [
-                      "close garage",
-                      "close door",
-                      "Close"
-                  ]
-              },
-              {
-                  "name": "StatusIntent",
-                  "slots": [],
-                  "samples": [
-                      "the status",
-                      "for the status",
-                      "what is the status",
-                      "what's the status",
-                      "status"
-                  ]
-              }
-          ],
-          "types": []
-      }
-  }
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "my garage",
+            "modelConfiguration": {
+                "fallbackIntentSensitivity": {
+                    "level": "LOW"
+                }
+            },
+            "intents": [
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.FallbackIntent",
+                    "samples": []
+                },
+                {
+                    "name": "OpenIntent",
+                    "slots": [],
+                    "samples": [
+                        "open garage",
+                        "open door",
+                        "open"
+                    ]
+                },
+                {
+                    "name": "StatusIntent",
+                    "slots": [],
+                    "samples": [
+                        "status of  garage door",
+                        "status of door",
+                        "status"
+                    ]
+                },
+                {
+                    "name": "CloseIntent",
+                    "slots": [],
+                    "samples": [
+                        "close",
+                        "close garage door",
+                        "close garage",
+                        "close door"
+                    ]
+                }
+            ],
+            "types": []
+        }
+    }
 }
