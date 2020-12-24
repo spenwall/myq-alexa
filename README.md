@@ -40,3 +40,13 @@ You can use the commands after saying `Alexa ask my garage` (or whatever invoke 
 * Open
 * Close
 * Status
+
+# Troubleshooting
+Sometimes the garage door is defined not as the first door in the list of devices sent back from myQ. If you are having trouble try changing line 28.
+```
+return result.devices[1].serial_number;
+```
+to 
+```
+return result.devices[0].serial_number;
+```
