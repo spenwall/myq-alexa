@@ -1,7 +1,7 @@
 {
-  "name": "my-garage",
+  "name": "Meu Portão",
   "version": "1.0.0",
-  "description": "MyQ garage door opener for alexa",
+  "description": "MyQ abrir portão com Alexa",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
