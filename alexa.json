@@ -1,12 +1,7 @@
 {
     "interactionModel": {
         "languageModel": {
-            "invocationName": "my garage",
-            "modelConfiguration": {
-                "fallbackIntentSensitivity": {
-                    "level": "LOW"
-                }
-            },
+            "invocationName": "spencer test",
             "intents": [
                 {
                     "name": "AMAZON.CancelIntent",
@@ -32,28 +27,27 @@
                     "name": "OpenIntent",
                     "slots": [],
                     "samples": [
+                        "open garage door",
                         "open garage",
                         "open door",
                         "open"
                     ]
                 },
                 {
-                    "name": "StatusIntent",
-                    "slots": [],
-                    "samples": [
-                        "status of  garage door",
-                        "status of door",
-                        "status"
-                    ]
-                },
-                {
                     "name": "CloseIntent",
                     "slots": [],
                     "samples": [
-                        "close",
                         "close garage door",
                         "close garage",
-                        "close door"
+                        "close door",
+                        "close"
+                    ]
+                },
+                {
+                    "name": "StatusIntent",
+                    "slots": [],
+                    "samples": [
+                        "status"
                     ]
                 }
             ],

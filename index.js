@@ -4,36 +4,39 @@
  * session persistence, api calls, and more.
  * */
 const Alexa = require('ask-sdk-core');
-const MyQ = require("myq-api");
+const { myQApi } = require('@koush/myq');
 const email = "MYQ_EMAIL" 
 const password = "MYQ_PASSWORD"
 
-const account = new MyQ()
+const account = new myQApi(console.log.bind(console), console, email, password);
 
 const doorStatus = async () => {
   try {
-    const doorSerial = await serial()
-
-    const response = await account.getDoorState(doorSerial);
-    return response.deviceState;
+    const door = await getDoor()
+    
+    return door.state.door_state;
   } catch(error) {
     console.log(error)
   }
 }
 
-const serial = async () => {
-    await account.login(email, password);
-    
-    const result = await account.getDevices([3, 15, 17]);
-    return result.devices[1].serial_number;
+const getDoor = async () => {
+  await account.refreshDevices();
+
+  //Get the first garage door found
+  for (const device of account.devices) {
+    if(device.device_family==='garagedoor') {
+      return device;
+    }
   }
+}
 
 const LaunchRequestHandler = {
     canHandle(handlerInput) {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'LaunchRequest';
     },
     handle(handlerInput) {
-        const speakOutput = 'Welcome, you can say Open, close, or status. Which would you like to try?';
+        const speakOutput = 'Welcome, you can say Hello or Help. Which would you like to try?';
 
         return handlerInput.responseBuilder
             .speak(speakOutput)
@@ -42,73 +45,77 @@ const LaunchRequestHandler = {
     }
 };
 
+
 const OpenIntentHandler = {
-  canHandle(handlerInput) {
-    return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
-      && Alexa.getIntentName(handlerInput.requestEnvelope) === 'OpenIntent';
-  },
-  async handle(handlerInput) {
-    const status = await doorStatus()
+    canHandle(handlerInput) {
+        return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
+            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'OpenIntent';
+    },
+    async handle(handlerInput) {
+        const door = await getDoor();
+        const status = await doorStatus();
 
-    let speakOutput = 'The door is ' + status
-    if (status === 'open') {
-      speakOutput = 'The door is already open';
-    }
+        let speakOutput = 'The door is ' + status
+        if (status === 'open') {
+            speakOutput = 'The door is already open';
+        }
     
-    if (status === 'closed') {
-      try {
-        await account.setDoorState(await serial(), MyQ.actions.door.OPEN);
-        speakOutput = 'The door is opening'
-      } catch(error) {
-        console.log(error)
-      }
-    }
+        if (status === 'closed') {
+            try {
+                await account.execute(door, 'Open');
+                speakOutput = 'The door is opening'
+            } catch(error) {
+                console.log(error)
+            }
+         }
 
-    return handlerInput.responseBuilder
-      .speak(speakOutput)
-      .getResponse();
-  }
+        return handlerInput.responseBuilder
+            .speak(speakOutput)
+            .getResponse();
+    }
 };
 
 const CloseIntentHandler = {
-  canHandle(handlerInput) {
-    return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
-        && Alexa.getIntentName(handlerInput.requestEnvelope) === 'CloseIntent';
-  },
-  async handle(handlerInput) {
-    const status = await doorStatus()
+    canHandle(handlerInput) {
+        return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
+            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'CloseIntent';
+    },
+    async handle(handlerInput) {
+        const door = await getDoor();
+        const status = await doorStatus();
 
-    let speakOutput = 'The door is ' + status
-    if (status === 'closed') {
-      speakOutput = 'The door is already closed'
-    }
+        let speakOutput = 'The door is ' + status
+        if (status === 'closed') {
+            speakOutput = 'The door is already closed';
+        }
+    
+        if (status === 'open') {
+            try {
+                await account.execute(door, 'Close');
+                speakOutput = 'The door is closing'
+            } catch(error) {
+                console.log(error)
+            }
+         }
 
-    if (status === 'open') {
-      try {
-          await account.setDoorState(await serial(), MyQ.actions.door.CLOSE);
-          speakOutput = 'The door is closing'
-      } catch(error) {
-          console.log(error)
-      }
+        return handlerInput.responseBuilder
+            .speak(speakOutput)
+            .getResponse();
     }
-    return handlerInput.responseBuilder
-      .speak(speakOutput)
-      .getResponse();
-  }
 };
 
 const StatusIntentHandler = {
-  canHandle(handlerInput) {
-    return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
-        && Alexa.getIntentName(handlerInput.requestEnvelope) === 'StatusIntent';
-  },
-  async handle(handlerInput) {
-    let speakOutput = 'The door is ' + await doorStatus()
+    canHandle(handlerInput) {
+        return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
+            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'StatusIntent';
+    },
+    async handle(handlerInput) {
+        let speakOutput = 'The door is ' + await doorStatus();
 
-    return handlerInput.responseBuilder
-      .speak(speakOutput)
-      .getResponse();
-  }
+        return handlerInput.responseBuilder
+            .speak(speakOutput)
+            .getResponse();
+    }
 };
 
 const HelpIntentHandler = {
@@ -117,7 +124,7 @@ const HelpIntentHandler = {
             && Alexa.getIntentName(handlerInput.requestEnvelope) === 'AMAZON.HelpIntent';
     },
     handle(handlerInput) {
-        const speakOutput = 'You can say open, close or status.';
+        const speakOutput = 'You can say open close or status';
 
         return handlerInput.responseBuilder
             .speak(speakOutput)
@@ -174,6 +181,25 @@ const SessionEndedRequestHandler = {
         return handlerInput.responseBuilder.getResponse(); // notice we send an empty response
     }
 };
+/* *
+ * The intent reflector is used for interaction model testing and debugging.
+ * It will simply repeat the intent the user said. You can create custom handlers for your intents 
+ * by defining them above, then also adding them to the request handler chain below 
+ * */
+const IntentReflectorHandler = {
+    canHandle(handlerInput) {
+        return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest';
+    },
+    handle(handlerInput) {
+        const intentName = Alexa.getIntentName(handlerInput.requestEnvelope);
+        const speakOutput = `You just triggered ${intentName}`;
+
+        return handlerInput.responseBuilder
+            .speak(speakOutput)
+            //.reprompt('add a reprompt if you want to keep the session open for the user to respond')
+            .getResponse();
+    }
+};
 /**
  * Generic error handling to capture any syntax or routing errors. If you receive an error
  * stating the request handler chain is not found, you have not implemented a handler for
@@ -208,9 +234,9 @@ exports.handler = Alexa.SkillBuilders.custom()
         HelpIntentHandler,
         CancelAndStopIntentHandler,
         FallbackIntentHandler,
-        SessionEndedRequestHandler)
+        SessionEndedRequestHandler,
+        IntentReflectorHandler)
     .addErrorHandlers(
         ErrorHandler)
     .withCustomUserAgent('sample/hello-world/v1.2')
     .lambda();
-
