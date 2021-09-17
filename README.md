@@ -42,11 +42,12 @@ You can use the commands after saying `Alexa ask my garage` (or whatever invoke 
 * Status
 
 # Troubleshooting
-Sometimes the garage door is defined not as the first door in the list of devices sent back from myQ. If you are having trouble try changing line 28.
+If you would like to specify a certain door(device) you can change the `getDoor()` function to the following. This is useful if you have more than one door you can set up a couple of skills that control separate doors.
+
 ```
-return result.devices[1].serial_number;
-```
-to 
-```
-return result.devices[0].serial_number;
+const getDoor = async () => {
+  await account.refreshDevices();
+
+  return account.devices[0];
+}
 ```
